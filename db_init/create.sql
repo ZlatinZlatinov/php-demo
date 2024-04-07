@@ -1,0 +1,10 @@
+USE php_demo; 
+
+CREATE TABLE users(
+	id INT PRIMARY KEY AUTO_INCREMENT, 
+    username VARCHAR(50) NOT NULL UNIQUE, 
+    email VARCHAR(50) NOT NULL UNIQUE, 
+    password VARCHAR(245) NOT NULL,
+    isAdmin BOOL DEFAULT 0,
+    created_at DATETIME DEFAULT NOW()
+);
