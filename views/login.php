@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!empty($email) && !empty($password)) {
 
         include("./connect_db.php");
-        $sql = "SELECT `username`, `email`, `password` FROM users WHERE `email` = '{$email}'";
+        $sql = "SELECT `id`, `username`, `email`, `password` FROM users WHERE `email` = '{$email}'";
 
         try {
             $result = mysqli_query($connection, $sql);
@@ -37,6 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if(password_verify($password, $row["password"])){
                     $_SESSION["isLogged"] = true;
                     $_SESSION["username"] = $row["username"];
+                    $_SESSION["user_id"] = $row["id"];
 
                     header("Location: ./home");
                 } else {

@@ -63,7 +63,8 @@ input {
 }
 
 #login,
-#register {
+#register, 
+#create {
     display: flex;
     flex-direction: column;
     justify-content: center;
