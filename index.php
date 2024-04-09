@@ -1,5 +1,5 @@
-<?php 
-    session_start();
+<?php
+session_start();
 ?>
 
 <!DOCTYPE html>
@@ -20,7 +20,6 @@
     <?php
 
     $request = $_SERVER['REQUEST_URI'];
-  
     $viewDir = '/views/';
 
     switch ($request) {
@@ -37,22 +36,46 @@
             require __DIR__ . $viewDir . 'catalog.php';
             break;
 
+        case '/app-demo/details':
+            require __DIR__ . $viewDir . 'details.php';
+            break;
+
         case '/app-demo/create':
-            require __DIR__ . $viewDir . 'create.php';
+            if (isset($_SESSION["isLogged"])) {
+                require __DIR__ . $viewDir . 'create.php';
+            } else {
+                require __DIR__ . $viewDir . 'login.php';
+            }
+
             break;
 
         case '/app-demo/login':
-            require __DIR__ . $viewDir . 'login.php';
+            if (isset($_SESSION["isLogged"])) {
+                require __DIR__ . $viewDir . 'home.php';
+            } else {
+                require __DIR__ . $viewDir . 'login.php';
+            }
+
             break;
 
         case '/app-demo/register':
-            require __DIR__ . $viewDir . 'register.php';
-            break; 
+            if (isset($_SESSION["isLogged"])) {
+                require __DIR__ . $viewDir . 'home.php';
+            } else {
+                require __DIR__ . $viewDir . 'register.php';
+            }
 
-            case '/app-demo/logout':
-                session_destroy(); 
+            break;
+
+        case '/app-demo/logout':
+            if (isset($_SESSION["isLogged"])) {
+                session_destroy();
                 header("Location: ./home");
-                break;
+            } else {
+                require __DIR__ . $viewDir . 'home.php';
+            }
+
+            break;
         default:
             http_response_code(404);
             require __DIR__ . $viewDir . '404.php';
