@@ -53,6 +53,11 @@ input {
     padding: 0.2em;
     border: 0.5px solid rgb(75, 95, 227);
     border-radius: 0.5em;
+    width: 100%;
+} 
+
+textarea {
+    width: 100%;
 }
 
 .form-container {
