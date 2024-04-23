@@ -19,7 +19,7 @@ session_start();
 
     <?php
 
-    $request = $_SERVER['REQUEST_URI'];
+    $request = parse_url($_SERVER['REQUEST_URI'])["path"];
     $viewDir = '/views/';
 
     switch ($request) {
@@ -47,7 +47,16 @@ session_start();
                 require __DIR__ . $viewDir . 'login.php';
             }
 
-            break;
+            break; 
+
+            case '/app-demo/edit':
+                if (isset($_SESSION["isLogged"])) {
+                    require __DIR__ . $viewDir . 'edit.php';
+                } else {
+                    require __DIR__ . $viewDir . 'login.php';
+                }
+    
+                break;
 
         case '/app-demo/login':
             if (isset($_SESSION["isLogged"])) {

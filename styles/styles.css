@@ -74,7 +74,9 @@ textarea {
 
 #login,
 #register, 
-#create {
+#create,
+#edit,
+#details {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -125,4 +127,9 @@ section#catalog div.width-wrapper {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+} 
+
+#details img {
+    width: 500px;
+    height: 700px;
 }

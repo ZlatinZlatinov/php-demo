@@ -18,7 +18,7 @@
 
                     echo "
                         <div class='card'>
-                            <a href='./details'>" .
+                            <a href='./details?id={$id}'>" .
                             '<img src="data:image/jpeg;base64,' . base64_encode($imageData) . '" alt="Uploaded Image">'.
                             "<h3>{$title}</h3> 
                             <h4>{$author}</h4>
