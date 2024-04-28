@@ -2,3 +2,4 @@ connect_db.php
 secret.php 
 images 
 PHPMailer
+mailConfig.php
