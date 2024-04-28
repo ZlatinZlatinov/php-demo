@@ -28,8 +28,11 @@
 </section>
 
 <?php
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     include "./verify.php";
+
+    // Robot test
     if(verifyUser()){
         $username = filter_input(INPUT_POST, "username", FILTER_SANITIZE_SPECIAL_CHARS); //$_POST["username"];
         $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL); //$_POST["email"];
@@ -38,24 +41,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (!empty($username) || !empty($email) || !empty($age)) {
     
             include("./connect_db.php");
-    
+            require './mailSender.php';
+
             $hashed_pass = password_hash($password, PASSWORD_BCRYPT);
+            $verification_code = substr(number_format(time() * rand(), 0, '', '',), 0, 6);
+
+            $sql = "INSERT INTO users(username, email, password, verification_code) VALUES('{$username}', '{$email}', '{$hashed_pass}', '{$verification_code}')";
     
-            $sql = "INSERT INTO users(username, email, password) VALUES('{$username}', '{$email}', '{$hashed_pass}')";
-    
-            try {
-                mysqli_query($connection, $sql);
-    
-                $_SESSION["isLogged"] = true;
-                $_SESSION["username"] = $username;
-    
-                header("Location: ./home");
-            } catch (mysqli_sql_exception) {
-                die("Oops something went wrong " . mysqli_connect_error($connection));
+            $subject = "Email verification";
+            $message = '<p>Your verification code is: <b style=font-size: 30px;">'.
+                $verification_code.'</b></p>';
+
+            if(sendEmail($email, $subject, $message)){
+                try {
+                    mysqli_query($connection, $sql);
+        
+                    // $_SESSION["isLogged"] = true;
+                    // $_SESSION["username"] = $username;
+        
+                    header("Location: ./email-verification?email={$email}");
+                } catch (mysqli_sql_exception) {
+                    die("Oops something went wrong " . mysqli_connect_error($connection));
+                }
+            
+                mysqli_close($connection);
+            } else {
+                die('Message was not delivered :(');
             }
-    
-    
-            mysqli_close($connection);
+            
         } else {
             echo "<div class='result'><h2>Wrong Input</h2></div>";
         }

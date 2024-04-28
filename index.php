@@ -12,7 +12,7 @@ session_start();
 
     <!-- Captcha -->
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-    
+
     <title>Php Demo</title>
 </head>
 
@@ -78,8 +78,11 @@ session_start();
                 require __DIR__ . $viewDir . 'register.php';
             }
 
-            break;
+            break; 
 
+        case '/app-demo/email-verification/':
+            require __DIR__ . $viewDir . 'verifyEmail.php';
+            break;
         case '/app-demo/logout':
             if (isset($_SESSION["isLogged"])) {
                 session_destroy();
