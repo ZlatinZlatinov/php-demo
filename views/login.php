@@ -13,6 +13,10 @@
                 <input type="password" name="password" id="password">
             </div>
 
+            <div>
+                <div class="g-recaptcha" data-sitekey="6LfTOKMpAAAAAD4LXNpAWSlyz5xFFvcy2kqS3d2M"></div>
+            </div>
+
             <input type="submit" class="submit-btn" value="Login">
         </form>
     </div>
@@ -32,9 +36,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $result = mysqli_query($connection, $sql);
 
             if (mysqli_num_rows($result) > 0) {
-                $row = mysqli_fetch_assoc($result); 
+                $row = mysqli_fetch_assoc($result);
 
-                if(password_verify($password, $row["password"])){
+                if (password_verify($password, $row["password"])) {
                     $_SESSION["isLogged"] = true;
                     $_SESSION["username"] = $row["username"];
                     $_SESSION["user_id"] = $row["id"];

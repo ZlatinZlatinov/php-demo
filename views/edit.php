@@ -38,38 +38,34 @@
         </form>
     </div>';
 
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $title = filter_input(INPUT_POST, "title", FILTER_SANITIZE_SPECIAL_CHARS);
+        $author = filter_input(INPUT_POST, "author", FILTER_SANITIZE_SPECIAL_CHARS);
+        $pages = filter_input(INPUT_POST, "pages", FILTER_SANITIZE_NUMBER_INT);
+        $description = filter_input(INPUT_POST, "description", FILTER_SANITIZE_SPECIAL_CHARS);
+    
+        if (isset($title)  && isset($author) && isset($description)) {
+            // $img = $_FILES["image"]["tmp_name"];
+            // $imgContent = file_get_contents($img);
+            // include("./connect_db.php");
+            $sql = "UPDATE books SET title = '{$title}', author = '{$author}', pages = {$pages}, description = '{$description}' WHERE id= {$id}";
+    
+            try {
+                // $statement = $connection->prepare($sql);
+                // $statement->bind_param('s', $imgContent);
+                // $current_id = $statement->execute() or die("<b>Error </b>" . mysqli_connect_error());
+                mysqli_query($connection, $sql);
+    
+                header("Location: ./details?id={$id}");
+            } catch (mysqli_sql_exception) {
+                // echo $connection->connect_error;
+                die("Oops something went wrong " . mysqli_error($connection));
+            }
+    
+            mysqli_close($connection);
+        } else {
+            echo "Pleased enter valid fields!";
+        }
+    }
     ?>
 </section>
-
-<?php
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $title = filter_input(INPUT_POST, "title", FILTER_SANITIZE_SPECIAL_CHARS);
-    $author = filter_input(INPUT_POST, "author", FILTER_SANITIZE_SPECIAL_CHARS);
-    $pages = filter_input(INPUT_POST, "pages", FILTER_SANITIZE_NUMBER_INT);
-    $description = filter_input(INPUT_POST, "description", FILTER_SANITIZE_SPECIAL_CHARS);
-
-    if (isset($title)  && isset($author) && isset($description)) {
-        // $img = $_FILES["image"]["tmp_name"];
-        // $imgContent = file_get_contents($img);
-        echo $request = parse_url($_SERVER['REQUEST_URI'])["id"];
-        include("./connect_db.php");
-        $sql = "UPDATE books SET `title` = `{$title}`, `author` = `{$author}`, `description` = `{$description}` WHERE `id`= `{$id}`";
-
-        try {
-            // $statement = $connection->prepare($sql);
-            // $statement->bind_param('s', $imgContent);
-            // $current_id = $statement->execute() or die("<b>Error </b>" . mysqli_connect_error());
-            mysqli_query($connection, $sql);
-
-            header("Location: ./details?id={$id}");
-        } catch (mysqli_sql_exception) {
-            echo $connection->connect_error;
-            die("Oops something went wrong " . mysqli_connect_error());
-        }
-
-        mysqli_close($connection);
-    } else {
-        echo "Pleased enter valid fields!";
-    }
-}
-?>

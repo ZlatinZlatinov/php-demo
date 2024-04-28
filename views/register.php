@@ -18,10 +18,14 @@
                 <input type="password" name="password" id="password">
             </div>
 
+            <div>
+                <div class="g-recaptcha" data-sitekey="6LfTOKMpAAAAAD4LXNpAWSlyz5xFFvcy2kqS3d2M"></div>
+            </div>
+
             <input type="submit" class="submit-btn" value="Register">
         </form>
     </div>
-</section> 
+</section>
 
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -30,27 +34,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST["password"];
 
     if (!empty($username) || !empty($email) || !empty($age)) {
-        
+
         include("./connect_db.php");
-        
+
         $hashed_pass = password_hash($password, PASSWORD_BCRYPT);
 
-        $sql = "INSERT INTO users(username, email, password) VALUES('{$username}', '{$email}', '{$hashed_pass}')"; 
+        $sql = "INSERT INTO users(username, email, password) VALUES('{$username}', '{$email}', '{$hashed_pass}')";
 
-        try{
+        try {
             mysqli_query($connection, $sql);
 
             $_SESSION["isLogged"] = true;
-            $_SESSION["username"] = $username; 
+            $_SESSION["username"] = $username;
 
             header("Location: ./home");
-        } catch(mysqli_sql_exception){
-            die("Oops something went wrong ".mysqli_connect_error());
+        } catch (mysqli_sql_exception) {
+            die("Oops something went wrong " . mysqli_connect_error());
         }
 
-        
-        mysqli_close($connection);
 
+        mysqli_close($connection);
     } else {
         echo "<div class='result'><h2>Wrong Input</h2></div>";
     }

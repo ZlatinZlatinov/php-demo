@@ -16,6 +16,7 @@
 
                 echo "<h3>$title</h3>";
                 echo '<img src="data:image/jpeg;base64,' . base64_encode($imageData) . '" alt="Uploaded Image">';
+                echo 'Pages:'.$row["pages"];
                 echo "<a href='./edit?id={$id}'>Edit</a>";
             } else {
                 header("Location: ./404");
