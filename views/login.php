@@ -24,42 +24,47 @@
 
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL); //$_POST["email"];
-    $password = $_POST["password"];
+    include "./verify.php";
+    if (verifyUser()) {
+        $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL); //$_POST["email"];
+        $password = $_POST["password"];
 
-    if (!empty($email) && !empty($password)) {
+        if (!empty($email) && !empty($password)) {
 
-        include("./connect_db.php");
-        $sql = "SELECT `id`, `username`, `email`, `password` FROM users WHERE `email` = '{$email}'";
+            include("./connect_db.php");
+            $sql = "SELECT `id`, `username`, `email`, `password` FROM users WHERE `email` = '{$email}'";
 
-        try {
-            $result = mysqli_query($connection, $sql);
+            try {
+                $result = mysqli_query($connection, $sql);
 
-            if (mysqli_num_rows($result) > 0) {
-                $row = mysqli_fetch_assoc($result);
+                if (mysqli_num_rows($result) > 0) {
+                    $row = mysqli_fetch_assoc($result);
 
-                if (password_verify($password, $row["password"])) {
-                    $_SESSION["isLogged"] = true;
-                    $_SESSION["username"] = $row["username"];
-                    $_SESSION["user_id"] = $row["id"];
+                    if (password_verify($password, $row["password"])) {
+                        $_SESSION["isLogged"] = true;
+                        $_SESSION["username"] = $row["username"];
+                        $_SESSION["user_id"] = $row["id"];
 
-                    header("Location: ./home");
+                        header("Location: ./home");
+                    } else {
+                        echo "Wrong username or password";
+                    }
+
+                    // mysqli_close($connection);
                 } else {
                     echo "Wrong username or password";
                 }
-
-                // mysqli_close($connection);
-            } else {
+            } catch (mysqli_sql_exception) {
                 echo "Wrong username or password";
+                die("Oops something went wrong " . mysqli_connect_error());
             }
-        } catch (mysqli_sql_exception) {
-            echo "Wrong username or password";
-            die("Oops something went wrong " . mysqli_connect_error());
-        }
 
-        mysqli_close($connection);
+            mysqli_close($connection);
+        } else {
+            echo "Enter valid Email addres";
+        }
     } else {
-        echo "Enter valid Email addres";
+        echo "You are robot!";
     }
 }
 
