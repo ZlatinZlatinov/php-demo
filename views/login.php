@@ -23,9 +23,6 @@
 </section>
 
 <?php
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP; 
-use PHPMailer\PHPMailer\Exception;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     include "./verify.php";
@@ -44,14 +41,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if (mysqli_num_rows($result) > 0) {
                     $row = mysqli_fetch_assoc($result);
 
-                    if (password_verify($password, $row["password"])) {
-                        $_SESSION["isLogged"] = true;
-                        $_SESSION["username"] = $row["username"];
-                        $_SESSION["user_id"] = $row["id"];
-
-                        header("Location: ./home");
+                    if($row["email_verified_at"] == null){
+                        if (password_verify($password, $row["password"])) {
+                            $_SESSION["isLogged"] = true;
+                            $_SESSION["username"] = $row["username"];
+                            $_SESSION["user_id"] = $row["id"];
+    
+                            header("Location: ./home");
+                        } else {
+                            echo "Wrong username or password";
+                        }
                     } else {
-                        echo "Wrong username or password";
+                        header("Location: ./email-verification?email={$email}");
                     }
 
                     // mysqli_close($connection);

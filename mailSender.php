@@ -62,12 +62,17 @@
         $mail->Body = $message; 
         $mail->AltBody = $message;
 
-        if(!$mail->send()){
-            // message sending failed
-            return false;
-        } else {
-            // succesful sending
-            return true;
+        try{
+            if(!$mail->send()){
+                // message sending failed
+                return false;
+            } else {
+                // succesful sending
+                return true;
+            }
+        } catch(Exception $e){
+           echo $e->errorMessage();
         }
+
     }
 ?>

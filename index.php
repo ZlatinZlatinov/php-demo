@@ -80,7 +80,7 @@ session_start();
 
             break; 
 
-        case '/app-demo/email-verification/':
+        case '/app-demo/email-verification':
             require __DIR__ . $viewDir . 'verifyEmail.php';
             break;
         case '/app-demo/logout':
