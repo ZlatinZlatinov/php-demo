@@ -1,8 +1,14 @@
 <section id="edit" class="width-wrapper">
     <h2>This is Edit page</h2>
     <?php
-    include("./connect_db.php");
+    include("./connect_db.php"); 
+
+    if(!isset($_GET["id"])){
+        header("Location: ./");
+    } 
+
     $id = $_GET["id"];
+
     $sql = "SELECT * FROM books WHERE id = {$id}";
     $result = mysqli_query($connection, $sql);
 
